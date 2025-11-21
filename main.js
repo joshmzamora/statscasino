@@ -366,7 +366,10 @@ function startCupGame() {
   randomizeEmptyCup();
   cupResult.textContent = "Shuffling...";
   const cups = Array.from(cupContainer.children);
-  cups.forEach(cup => cup.classList.remove("cup-flip", "cup-prize", "cup-empty"));
+  cups.forEach(cup => {
+    cup.classList.remove("cup-flip", "cup-prize", "cup-empty");
+    cup.style.pointerEvents = "auto"; // Make sure cups are clickable
+  });
 
   // Simplified shuffle animation
   cupContainer.animate([
@@ -414,6 +417,8 @@ function handleCupClick(event) {
     setTimeout(() => {
       playCupBtn.classList.remove("disabled");
       isSpinning = false;
+       // This is the correct place to re-enable the cups
+      document.querySelectorAll(".cup").forEach(c => c.style.pointerEvents = "auto");
     }, 2500);
   }, 900);
 }
