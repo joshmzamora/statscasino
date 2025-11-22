@@ -148,6 +148,12 @@ h1 {
   margin-bottom: 10px;
 }
 
+#main-menu .card-icon {
+  font-size: 3.5rem;
+  margin-bottom: 15px;
+}
+
+
 /* --- Original Game Screen Styling (with enhancements) --- */
 .game-screen {
   display: none; /* Initially hidden */
