@@ -22,7 +22,7 @@ const gameScreens = document.querySelectorAll(".game-screen");
 const devModeCheckbox = document.getElementById("dev-mode");
 const jumpscareImage = document.getElementById("jumpscare-image");
 
-// Game buttons
+// Game buttons (now cards)
 const luckySpinBtn = document.getElementById("lucky-spin-btn");
 const sevensHeavenBtn = document.getElementById("sevens-heaven-btn");
 const cupFortuneBtn = document.getElementById("cup-fortune-btn");
@@ -90,7 +90,7 @@ function setupEventListeners() {
 
 // Navigation functions
 function showMainMenu() {
-  mainMenu.style.display = "flex";
+  mainMenu.style.display = "block";
   gameScreens.forEach((screen) => {
     screen.style.display = "none";
   });
@@ -119,23 +119,27 @@ function resetAllGameStates() {
     isSpinning = false;
     cancelAnimationFrame(animationFrameId);
     
-    wheel.style.transition = 'none';
-    wheel.style.transform = 'rotate(0deg)';
-    spinBtn.classList.remove('disabled');
-    spinResult.textContent = 'Select a color and spin the wheel!';
+    if(wheel) {
+      wheel.style.transition = 'none';
+      wheel.style.transform = 'rotate(0deg)';
+    }
+    if(spinBtn) spinBtn.classList.remove('disabled');
+    if(spinResult) spinResult.textContent = 'Select a color and spin the wheel!';
 
-    rouletteWheel.style.transition = 'none';
-    rouletteWheel.style.transform = 'rotate(0deg)';
-    rouletteBall.style.transform = 'translate(-50%, -50%) rotate(0deg)';
-    rollRouletteBtn.classList.remove('disabled');
-    bet6Btn.classList.remove('disabled', 'active');
-    bet7Btn.classList.remove('disabled', 'active');
+    if(rouletteWheel) {
+        rouletteWheel.style.transition = 'none';
+        rouletteWheel.style.transform = 'rotate(0deg)';
+    }
+    if(rouletteBall) rouletteBall.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+    if(rollRouletteBtn) rollRouletteBtn.classList.remove('disabled');
+    if(bet6Btn) bet6Btn.classList.remove('disabled', 'active');
+    if(bet7Btn) bet7Btn.classList.remove('disabled', 'active');
     currentBet = null;
-    roulettePockets.forEach(p => p.classList.remove('winning'));
-    rouletteResult.textContent = 'Place your bet and spin the wheel!';
+    if(roulettePockets.length > 0) roulettePockets.forEach(p => p.classList.remove('winning'));
+    if(rouletteResult) rouletteResult.textContent = 'Place your bet and spin the wheel!';
 
-    playCupBtn.classList.remove('disabled');
-    initializeCupGame();
+    if(playCupBtn) playCupBtn.classList.remove('disabled');
+    if(isCupGameInitialized) initializeCupGame();
 }
 
 // Money management
@@ -176,7 +180,7 @@ function initializeLuckySpin() {
   ];
   const sectorAngle = 360 / wheelSectors.length;
   const gradientParts = wheelSectors.map((s, i) => `${s.color} ${i * sectorAngle}deg ${(i + 1) * sectorAngle}deg`);
-  wheel.style.backgroundImage = `conic-gradient(${gradientParts.join(', ')})`;
+  wheel.style.backgroundImage = `conic-gradient(${gradientParts.join(', ')}`;
 }
 
 function playLuckySpin() {
@@ -217,11 +221,11 @@ function endLuckySpin(prize, label) {
     const netGain = prize - 5;
     spinResult.textContent = `Landed on ${label}! You ${netGain >= 0 ? 'won' : 'lost'} $${Math.abs(netGain)}.`;
     spinResult.classList.add(netGain >= 0 ? "win-flash" : "lose-flash");
-    wheelPointer.classList.add("bounce");
+    if(wheelPointer) wheelPointer.classList.add("bounce");
 
     setTimeout(() => {
-        spinBtn.classList.remove("disabled");
-        wheelPointer.classList.remove("bounce");
+        if(spinBtn) spinBtn.classList.remove("disabled");
+        if(wheelPointer) wheelPointer.classList.remove("bounce");
         isSpinning = false;
     }, 2000);
 }
@@ -311,7 +315,7 @@ function playSevensHeaven() {
         
         const ballX = Math.cos((currentBallAngle - 90) * (Math.PI / 180)) * currentRadius;
         const ballY = Math.sin((currentBallAngle - 90) * (Math.PI / 180)) * currentRadius;
-        rouletteBall.style.transform = `translate(${ballX}px, ${ballY}px)`;
+        if(rouletteBall) rouletteBall.style.transform = `translate(${ballX}px, ${ballY}px)`;
 
         if (progress < 1) {
             animationFrameId = requestAnimationFrame(animate);
@@ -325,18 +329,20 @@ function playSevensHeaven() {
 
 function endSevensHeavenSimulation(winningIndex, winningNumber) {
     const winningPocket = roulettePockets[winningIndex];
-    winningPocket.classList.add('winning');
+    if(winningPocket) winningPocket.classList.add('winning');
 
     const prize = currentBet === winningNumber ? 20 : 0;
     updateMoney(prize);
     const netGain = prize - 10;
-    rouletteResult.textContent = `Ball landed on ${winningNumber}! You ${netGain >= 0 ? 'won' : 'lost'} $${Math.abs(netGain)}.`;
-    rouletteResult.classList.add(netGain >= 0 ? "win-flash" : "lose-flash");
+    if(rouletteResult) {
+        rouletteResult.textContent = `Ball landed on ${winningNumber}! You ${netGain >= 0 ? 'won' : 'lost'} $${Math.abs(netGain)}.`;
+        rouletteResult.classList.add(netGain >= 0 ? "win-flash" : "lose-flash");
+    }
 
-    rollRouletteBtn.classList.remove("disabled");
-    bet6Btn.classList.remove("disabled");
-    bet7Btn.classList.remove("disabled");
-    winningPocket.classList.remove('winning');
+    if(rollRouletteBtn) rollRouletteBtn.classList.remove("disabled");
+    if(bet6Btn) bet6Btn.classList.remove("disabled");
+    if(bet7Btn) bet7Btn.classList.remove("disabled");
+    if(winningPocket) winningPocket.classList.remove('winning');
     isSpinning = false;
 }
 
@@ -407,8 +413,10 @@ function handleCupClick(event) {
     } else {
       cupResult.textContent = `You chose empty. You lost $7.`;
       jumpscareImage.classList.add("jumpscare");
+      jumpscareImage.classList.remove("hidden");
       setTimeout(() => {
         jumpscareImage.classList.remove("jumpscare");
+        jumpscareImage.classList.add("hidden");
       }, 500);
     }
     cupResult.classList.add(hasPrize ? "win-flash" : "lose-flash");
