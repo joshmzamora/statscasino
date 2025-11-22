@@ -5,6 +5,7 @@
   --color-gold: #ffd700;
   --color-dark-green: #1a472a;
   --color-light-green: #2a623d;
+  --color-dark-red: #8B0000;
 }
 
 * {
@@ -196,6 +197,115 @@ h1 {
 .game-screen .back-btn:hover {
     background-color: #D2691E;
 }
+
+/* --- Dev Mode Button --- */
+.dev-mode {
+    margin-top: 40px;
+}
+
+#dev-mode-btn {
+    background: linear-gradient(45deg, #4A0000, #9B0000);
+    color: #FFD700;
+    border: 2px solid #FFD700;
+    border-radius: 10px;
+    padding: 12px 25px;
+    font-family: var(--font-primary);
+    font-size: 1.3rem;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(255, 215, 0, 0.2);
+}
+
+#dev-mode-btn::before {
+    content: '⚙️'; /* Gear Icon */
+    margin-right: 10px;
+    display: inline-block;
+    transition: transform 0.5s ease;
+}
+
+#dev-mode-btn:hover {
+    background: linear-gradient(45deg, #6A0000, #B80000);
+    color: #fff;
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+}
+
+#dev-mode-btn:hover::before {
+    transform: rotate(180deg);
+}
+
+#dev-mode-btn.active {
+    background: linear-gradient(45deg, #004A00, #009B00);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
+}
+
+/* --- Custom Alert Modal --- */
+#custom-alert-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+#custom-alert-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#custom-alert-box {
+    background: linear-gradient(145deg, #333, #111);
+    border: 2px solid var(--color-gold);
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+#custom-alert-overlay.visible #custom-alert-box {
+    transform: scale(1);
+}
+
+#custom-alert-message {
+    font-size: 1.4rem;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+#custom-alert-close {
+    background: var(--color-gold);
+    color: var(--color-dark-red);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 30px;
+    font-family: var(--font-primary);
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#custom-alert-close:hover {
+    background: #fff;
+    transform: scale(1.05);
+}
+
 
 /* Rest of the original game styles... (wheel, roulette, etc.) */
 .wheel-container { position: relative; width: 300px; height: 300px; margin: 20px auto; }
