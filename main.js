@@ -358,11 +358,11 @@ function randomizeEmptyCup() {
 }
 
 function startCupGame() {
-  if (isSpinning || !checkCost(8)) return;
+  if (isSpinning || !checkCost(7)) return;
   isSpinning = true;
 
   playCupBtn.classList.add("disabled");
-  updateMoney(-8);
+  updateMoney(-7);
   randomizeEmptyCup();
   cupResult.textContent = "Shuffling...";
   const cups = Array.from(cupContainer.children);
@@ -401,9 +401,9 @@ function handleCupClick(event) {
     const hasPrize = cupIndex !== emptyCupIndex;
     const prize = hasPrize ? 10 : 0;
     updateMoney(prize);
-    const netGain = prize - 8;
+    const netGain = prize - 7;
     cup.classList.add(hasPrize ? "cup-prize" : "cup-empty");
-    cupResult.textContent = `You ${hasPrize ? "found a prize!" : "chose empty."} You ${netGain >= 0 ? 'won' : 'lost'} $${Math.abs(netGain)}.`;
+    cupResult.textContent = `You ${hasPri_ze ? "found a prize!" : "chose empty."} You ${netGain >= 0 ? 'won' : 'lost'} $${Math.abs(netGain)}.`;
     cupResult.classList.add(hasPrize ? "win-flash" : "lose-flash");
 
     if (!hasPrize) {
