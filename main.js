@@ -24,6 +24,9 @@ const gameScreens = document.querySelectorAll(".game-screen");
 const devModeBtn = document.getElementById("dev-mode-btn");
 const jumpscareImage = document.getElementById("jumpscare-image");
 const particleContainer = document.getElementById("particle-container");
+const customAlertOverlay = document.getElementById('custom-alert-overlay');
+const customAlertMessage = document.getElementById('custom-alert-message');
+const customAlertClose = document.getElementById('custom-alert-close');
 
 // Navigation
 const luckySpinBtn = document.getElementById("lucky-spin-btn");
@@ -64,8 +67,18 @@ function init() {
   updateBalance();
 }
 
+// --- Custom Alert ---
+function showAlert(message) {
+    customAlertMessage.textContent = message;
+    customAlertOverlay.classList.add('visible');
+}
+
 // --- Event Listeners ---
 function setupEventListeners() {
+    customAlertClose.addEventListener('click', () => {
+        customAlertOverlay.classList.remove('visible');
+    });
+
     luckySpinBtn.addEventListener("click", () => { playClickSound(); showGame("lucky-spin"); });
     sevensHeavenBtn.addEventListener("click", () => { playClickSound(); showGame("sevens-heaven"); });
     cupFortuneBtn.addEventListener("click", () => { playClickSound(); showGame("cup-fortune"); });
@@ -83,13 +96,13 @@ function setupEventListeners() {
         const password = prompt("Enter developer password:");
         if (password === "67") {
             isDevMode = !isDevMode;
-            alert("Developer mode " + (isDevMode ? "activated" : "deactivated") + ".");
+            showAlert("Developer mode " + (isDevMode ? "activated. Games are now free to play." : "deactivated. Games are no longer free to play."));
             devModeBtn.textContent = isDevMode ? "Dev Mode: ON" : "Developer Mode";
             devModeBtn.classList.toggle('active', isDevMode);
         } else if (password === "root") {
             playerMoney = Infinity;
             updateBalance();
-            alert("Infinite money enabled!");
+            showAlert("Infinite money enabled! You are now the casino.");
         } else if (password === "jumpscare") {
             jumpscareImage.classList.add("jumpscare");
             jumpscareImage.classList.remove("hidden");
@@ -98,7 +111,7 @@ function setupEventListeners() {
                 jumpscareImage.classList.add("hidden");
             }, 500);
         } else {
-            alert("Incorrect password.");
+            showAlert("Incorrect password. Access denied.");
         }
     });
 
@@ -149,7 +162,7 @@ function updateBalance() {
 
 function checkCost(cost) {
   if (isDevMode || playerMoney >= cost) return true;
-  alert("Not enough money!");
+  showAlert("You don't have enough funds to play this game.");
   return false;
 }
 
@@ -256,7 +269,7 @@ function setBet(number) {
 }
 
 function playSevensHeaven() {
-    if (!currentBet) { alert("Please place a bet on 6 or 7 first!"); return; }
+    if (!currentBet) { showAlert("Please place a bet on 6 or 7 first!"); return; }
     if (isSpinning || !checkCost(10)) return;
     isSpinning = true;
     playSpinSound();
