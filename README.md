@@ -21,11 +21,11 @@ Win: $20 for correct guess
 50/50 chance
 
 🥤 Cup of Fortune
-Cost: $10 per play
+Cost: $7 per play
 
 5 cups: 4 have prizes, 1 is empty
 
-Win: $2 for finding a prize
+Win: $10 for finding a prize
 
 Random: Empty cup changes every game
 

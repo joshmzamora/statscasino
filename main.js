@@ -166,7 +166,7 @@ function initializeLuckySpin() {
   ];
   const sectorAngle = 360 / wheelSectors.length;
   const gradientParts = wheelSectors.map((s, i) => `${s.color} ${i * sectorAngle}deg ${(i + 1) * sectorAngle}deg`);
-  wheel.style.backgroundImage = `conic-gradient(${gradientParts.join(', ')})`;
+  wheel.style.backgroundImage = `conic-gradient(${gradientParts.join(', ')}`;
 }
 
 function playLuckySpin() {
@@ -216,7 +216,7 @@ function endLuckySpin(prize, label) {
     }, 2000);
 }
 
-// Game 2: Sevens Heaven (Physics Simulation)
+// Game 2: Sevens Heaven (Time-based Animation)
 function initializeSevensHeaven() {
     rouletteWheel.innerHTML = '';
     roulettePockets = [];
@@ -266,62 +266,54 @@ function playSevensHeaven() {
     rouletteResult.textContent = "Spinning...";
     updateMoney(-10);
 
-    // Physics parameters
-    let wheelSpeed = 10 + Math.random() * 5; // degrees per frame
-    let ballSpeed = -15 - Math.random() * 5; // degrees per frame (opposite direction)
-    let wheelAngle = 0;
-    let ballAngle = 0;
-    let ballRadius = 135; // Start on outer track
-    const wheelFriction = 0.995;
-    const ballFriction = 0.997;
-    const spiralInSpeed = 0.05;
-    const pocketRadius = (rouletteWheel.clientWidth / 2) * 0.75;
+    // Determine outcome
+    const winningNumber = Math.random() < 0.5 ? 6 : 7;
+    const winningPockets = roulettePockets.map((p, i) => ({...p, index: i})).filter(p => rouletteNumbers[p.index] === winningNumber);
+    const { index: winningIndex } = winningPockets[Math.floor(Math.random() * winningPockets.length)];
 
-    function animatePhysics(timestamp) {
-        // Update angles
-        wheelAngle = (wheelAngle + wheelSpeed) % 360;
-        ballAngle = (ballAngle + ballSpeed) % 360;
+    const pocketSize = 360 / rouletteNumbers.length;
+    const finalBallAngle = winningIndex * pocketSize;
 
-        // Apply friction
-        wheelSpeed *= wheelFriction;
-        ballSpeed *= ballFriction;
+    const wheelRotations = 1;
+    const finalWheelAngle = (wheelRotations * 360) + (360 - finalBallAngle);
 
-        // Spiral ball inward
-        if (Math.abs(ballSpeed) < 2.5 && ballRadius > pocketRadius) {
-            ballRadius -= spiralInSpeed;
-        }
+    let startTime = null;
+    rouletteWheel.style.transition = 'none';
+    rouletteBall.style.transition = 'none';
 
-        // Update transforms
-        rouletteWheel.style.transform = `rotate(${wheelAngle}deg)`;
-        const ballX = Math.cos((ballAngle - 90) * (Math.PI / 180)) * ballRadius;
-        const ballY = Math.sin((ballAngle - 90) * (Math.PI / 180)) * ballRadius;
+    function animate(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / 4000, 1);
+        const easedProgress = easeOutQuint(progress);
+
+        // Animate wheel
+        const currentWheelAngle = easedProgress * finalWheelAngle;
+        rouletteWheel.style.transform = `rotate(${currentWheelAngle}deg)`;
+
+        // Animate ball
+        const ballStartAngle = 0;
+        const ballEndAngle = finalWheelAngle + finalBallAngle;
+        const currentBallAngle = ballStartAngle - (easedProgress * (ballEndAngle - ballStartAngle));
+        
+        const startRadius = 135;
+        const endRadius = (rouletteWheel.clientWidth / 2) * 0.75;
+        const currentRadius = startRadius + (easedProgress * (endRadius - startRadius));
+        
+        const ballX = Math.cos((currentBallAngle - 90) * (Math.PI / 180)) * currentRadius;
+        const ballY = Math.sin((currentBallAngle - 90) * (Math.PI / 180)) * currentRadius;
         rouletteBall.style.transform = `translate(${ballX}px, ${ballY}px)`;
 
-        // Continue animation or end it
-        if (Math.abs(wheelSpeed) > 0.01 || Math.abs(ballSpeed) > 0.01 || ballRadius > pocketRadius) {
-            animationFrameId = requestAnimationFrame(animatePhysics);
+        if (progress < 1) {
+            animationFrameId = requestAnimationFrame(animate);
         } else {
-            endSevensHeavenSimulation(wheelAngle, ballAngle);
+            endSevensHeavenSimulation(winningIndex, winningNumber);
         }
     }
 
-    animationFrameId = requestAnimationFrame(animatePhysics);
+    animationFrameId = requestAnimationFrame(animate);
 }
 
-function endSevensHeavenSimulation(finalWheelAngle, finalBallAngle) {
-    const netBallAngle = (finalBallAngle - finalWheelAngle + 360) % 360;
-    const pocketSize = 360 / rouletteNumbers.length;
-    const winningIndex = Math.floor((netBallAngle + pocketSize / 2) % 360 / pocketSize);
-    const winningNumber = rouletteNumbers[winningIndex];
-
-    // Snap ball to pocket center
-    const pocketAngle = winningIndex * pocketSize;
-    const finalAngle = pocketAngle + finalWheelAngle;
-    const pocketRadius = (rouletteWheel.clientWidth / 2) * 0.75;
-    const ballX = Math.cos((finalAngle - 90) * (Math.PI / 180)) * pocketRadius;
-    const ballY = Math.sin((finalAngle - 90) * (Math.PI / 180)) * pocketRadius;
-    rouletteBall.style.transform = `translate(${ballX}px, ${ballY}px)`;
-
+function endSevensHeavenSimulation(winningIndex, winningNumber) {
     const winningPocket = roulettePockets[winningIndex];
     winningPocket.classList.add('winning');
 
@@ -331,13 +323,11 @@ function endSevensHeavenSimulation(finalWheelAngle, finalBallAngle) {
     rouletteResult.textContent = `Ball landed on ${winningNumber}! You ${netGain >= 0 ? 'won' : 'lost'} $${Math.abs(netGain)}.`;
     rouletteResult.classList.add(netGain >= 0 ? "win-flash" : "lose-flash");
 
-    setTimeout(() => {
-        rollRouletteBtn.classList.remove("disabled");
-        bet6Btn.classList.remove("disabled");
-        bet7Btn.classList.remove("disabled");
-        winningPocket.classList.remove('winning');
-        isSpinning = false;
-    }, 3000);
+    rollRouletteBtn.classList.remove("disabled");
+    bet6Btn.classList.remove("disabled");
+    bet7Btn.classList.remove("disabled");
+    winningPocket.classList.remove('winning');
+    isSpinning = false;
 }
 
 // Game 3: Cup of Fortune
@@ -401,23 +391,31 @@ function handleCupClick(event) {
     const hasPrize = cupIndex !== emptyCupIndex;
     const prize = hasPrize ? 10 : 0;
     updateMoney(prize);
-    const netGain = prize - 7;
     cup.classList.add(hasPrize ? "cup-prize" : "cup-empty");
-    cupResult.textContent = `You ${hasPri_ze ? "found a prize!" : "chose empty."} You ${netGain >= 0 ? 'won' : 'lost'} $${Math.abs(netGain)}.`;
+    if (hasPrize) {
+      cupResult.textContent = "You won $10!";
+    } else {
+      cupResult.textContent = `You chose empty. You lost $7.`;
+    }
     cupResult.classList.add(hasPrize ? "win-flash" : "lose-flash");
 
-    if (!hasPrize) {
-      setTimeout(() => {
-        document.querySelectorAll(".cup").forEach((c, i) => {
-          if (i !== emptyCupIndex) c.classList.add('cup-prize');
-        });
-      }, 500);
-    }
+    // Reveal all cups after a short delay
+    setTimeout(() => {
+      document.querySelectorAll(".cup").forEach((c, i) => {
+        if (i !== cupIndex) { // Don't re-flip the chosen cup
+          c.classList.add("cup-flip");
+          if (i !== emptyCupIndex) {
+            c.classList.add("cup-prize");
+          } else {
+            c.classList.add("cup-empty");
+          }
+        }
+      });
+    }, 1000);
 
     setTimeout(() => {
       playCupBtn.classList.remove("disabled");
       isSpinning = false;
-       // This is the correct place to re-enable the cups
       document.querySelectorAll(".cup").forEach(c => c.style.pointerEvents = "auto");
     }, 2500);
   }, 900);
