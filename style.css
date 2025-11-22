@@ -24,7 +24,7 @@ body {
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 #particle-container {
@@ -46,24 +46,13 @@ body {
 }
 
 @keyframes coin-fall {
-    0% {
-        transform: translateY(-100px) scale(1);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(100vh) scale(0.5);
-        opacity: 0;
-    }
+    0% { transform: translateY(-100px) scale(1); opacity: 1; }
+    100% { transform: translateY(100vh) scale(0.5); opacity: 0; }
 }
 
-.main-container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  z-index: 1;
-}
+.main-container { width: 100%; max-width: 1200px; margin: 0 auto; z-index: 1; }
 
-/* --- Home Page Styling --- */
+/* --- Header --- */
 header {
   width: 100%;
   padding: 20px;
@@ -79,14 +68,10 @@ header {
   align-items: center;
   max-width: 900px;
   margin: 0 auto;
+  flex-wrap: wrap;
 }
 
-h1 {
-  font-family: var(--font-primary);
-  color: var(--color-gold);
-  font-size: 2.8rem;
-  text-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
-}
+h1 { font-family: var(--font-primary); color: var(--color-gold); font-size: 2.8rem; text-shadow: 0 0 15px rgba(255, 215, 0, 0.7); }
 
 #balance {
   font-size: 1.5rem;
@@ -99,29 +84,16 @@ h1 {
   box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
-#main-menu {
-  text-align: center;
-}
-
-#main-menu .hero-title {
-  font-family: var(--font-primary);
-  font-size: 3.5rem;
-  color: #fff;
-  margin-bottom: 10px;
-  text-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-}
-
-#main-menu .hero-subtitle {
-  font-size: 1.6rem;
-  color: #ccc;
-  font-style: italic;
-}
+/* --- Main Menu --- */
+#main-menu { text-align: center; }
+#main-menu .hero-title { font-family: var(--font-primary); font-size: 3.5rem; color: #fff; margin-bottom: 10px; text-shadow: 0 0 20px rgba(0, 0, 0, 0.6); }
+#main-menu .hero-subtitle { font-size: 1.6rem; color: #ccc; font-style: italic; }
 
 #main-menu .game-cards-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 35px;
+  gap: 40px; /* Increased gap */
   margin-top: 40px;
 }
 
@@ -129,191 +101,77 @@ h1 {
   background: linear-gradient(145deg, var(--color-light-green), var(--color-dark-green));
   border: 2px solid var(--color-gold);
   border-radius: 15px;
-  padding: 30px;
-  width: 280px;
+  padding: 30px 30px 50px; /* Increased bottom padding */
+  width: 320px; /* Increased width */
+  min-height: 280px; /* Added min-height */
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7), 0 0 5px rgba(255, 215, 0, 0.3) inset;
+  position: relative;
+  overflow: hidden;
+  display: flex; /* Flexbox for alignment */
+  flex-direction: column;
+  justify-content: center;
 }
 
-#main-menu .game-card:hover {
-  transform: translateY(-12px) scale(1.05);
-  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.5) inset;
+#main-menu .game-card:hover { transform: translateY(-12px) scale(1.05); box-shadow: 0 12px 40px rgba(255, 215, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.5) inset; }
+#main-menu .card-title { font-family: var(--font-primary); font-size: 2.2rem; color: var(--color-gold); margin-bottom: 15px; }
+#main-menu .card-icon { font-size: 4rem; margin-bottom: 20px; }
+
+/* --- Game Card Animations --- */
+#lucky-spin-btn::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, #B22222, #FFD700, #4682B4, #B22222); animation: spin-bg 8s linear infinite; z-index: 0; opacity: 0.25; }
+@keyframes spin-bg { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+#sevens-heaven-btn::before { content: ''; position: absolute; top: 0; left: -150%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent); transform: skewX(-25deg); animation: glitter 4s linear infinite; z-index: 1; }
+@keyframes glitter { 0% { left: -150%; } 100% { left: 150%; } }
+
+#cup-fortune-btn::after { content: '🏆'; font-size: 2.5rem; /* Adjusted size */ position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); animation: peek-a-boo 4s ease-in-out infinite 1s; z-index: 1; opacity: 0; }
+@keyframes peek-a-boo {
+    0%, 20%, 100% { bottom: -40px; opacity: 0; }
+    30% { bottom: 5px; opacity: 1; } /* Lowered position */
+    40%, 60% { bottom: 5px; opacity: 1; } /* Lowered position */
+    50% { bottom: 2px; opacity: 1; } /* Lowered position */
+    70% { bottom: -40px; opacity: 0; }
 }
 
-#main-menu .card-title {
-  font-family: var(--font-primary);
-  font-size: 2rem;
-  color: var(--color-gold);
-  margin-bottom: 10px;
+#main-menu .card-title, #main-menu .card-description, #main-menu .card-icon { position: relative; z-index: 2; }
+
+/* --- Media Queries for Responsiveness --- */
+@media (max-width: 1100px) {
+  #main-menu .game-cards-container { gap: 30px; }
+  #main-menu .game-card { width: 280px; min-height: 260px; }
 }
 
-#main-menu .card-icon {
-  font-size: 3.5rem;
-  margin-bottom: 15px;
+@media (max-width: 950px) {
+  .header-content { justify-content: center; gap: 20px; }
+  h1 { font-size: 2.5rem; }
 }
 
-
-/* --- Original Game Screen Styling (with enhancements) --- */
-.game-screen {
-  display: none; /* Initially hidden */
-  background-color: #e8e8e8;
-  padding: 30px;
-  border-radius: 15px;
-  text-align: center;
-  color: #333;
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  border: 3px solid var(--color-gold);
-  box-shadow: 0 0 25px rgba(0,0,0,0.5);
+@media (max-width: 680px) {
+  #main-menu .game-card { width: 90%; max-width: 350px; }
+  #main-menu .hero-title { font-size: 3rem; }
 }
 
-.game-screen h2.game-title {
-  font-family: var(--font-primary);
-  color: #222;
-  font-size: 2.5rem;
-  margin-bottom: 15px;
-}
-
-.game-screen button {
-    background-color: #B8860B; /* DarkGoldenRod */
-    border: 2px solid #DAA520; /* GoldenRod */
-    color: white;
-    padding: 12px 25px;
-    font-family: var(--font-secondary);
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.3s;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-
-.game-screen button:hover {
-    background-color: #DAA520;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
-}
-
-.game-screen .back-btn {
-    background-color: #A0522D; /* Sienna */
-    border-color: #D2691E; /* Chocolate */
-}
-.game-screen .back-btn:hover {
-    background-color: #D2691E;
-}
-
-/* --- Dev Mode Button --- */
-.dev-mode {
-    margin-top: 40px;
-}
-
-#dev-mode-btn {
-    background: linear-gradient(45deg, #4A0000, #9B0000);
-    color: #FFD700;
-    border: 2px solid #FFD700;
-    border-radius: 10px;
-    padding: 12px 25px;
-    font-family: var(--font-primary);
-    font-size: 1.3rem;
-    font-weight: bold;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(255, 215, 0, 0.2);
-}
-
-#dev-mode-btn::before {
-    content: '⚙️'; /* Gear Icon */
-    margin-right: 10px;
-    display: inline-block;
-    transition: transform 0.5s ease;
-}
-
-#dev-mode-btn:hover {
-    background: linear-gradient(45deg, #6A0000, #B80000);
-    color: #fff;
-    transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
-}
-
-#dev-mode-btn:hover::before {
-    transform: rotate(180deg);
-}
-
-#dev-mode-btn.active {
-    background: linear-gradient(45deg, #004A00, #009B00);
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
-}
-
-/* --- Custom Alert Modal --- */
-#custom-alert-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-}
-
-#custom-alert-overlay.visible {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-#custom-alert-box {
-    background: linear-gradient(145deg, #333, #111);
-    border: 2px solid var(--color-gold);
-    border-radius: 15px;
-    padding: 30px;
-    max-width: 400px;
-    width: 90%;
-    text-align: center;
-    color: #fff;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-    transform: scale(0.9);
-    transition: transform 0.3s ease;
-}
-
-#custom-alert-overlay.visible #custom-alert-box {
-    transform: scale(1);
-}
-
-#custom-alert-message {
-    font-size: 1.4rem;
-    margin-bottom: 25px;
-    line-height: 1.6;
-}
-
-#custom-alert-close {
-    background: var(--color-gold);
-    color: var(--color-dark-red);
-    border: none;
-    border-radius: 8px;
-    padding: 10px 30px;
-    font-family: var(--font-primary);
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-#custom-alert-close:hover {
-    background: #fff;
-    transform: scale(1.05);
-}
-
-
-/* Rest of the original game styles... (wheel, roulette, etc.) */
+/* --- Rest of the styles --- */
+.game-screen { display: none; background-color: #e8e8e8; padding: 30px; border-radius: 15px; text-align: center; color: #333; width: 100%; max-width: 900px; margin: 0 auto; border: 3px solid var(--color-gold); box-shadow: 0 0 25px rgba(0,0,0,0.5); }
+.game-screen h2.game-title { font-family: var(--font-primary); color: #222; font-size: 2.5rem; margin-bottom: 15px; }
+.game-screen button { background-color: #B8860B; border: 2px solid #DAA520; color: white; padding: 12px 25px; font-family: var(--font-secondary); font-size: 1.1rem; font-weight: 600; cursor: pointer; border-radius: 8px; transition: all 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+.game-screen button:hover { background-color: #DAA520; transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.4); }
+.game-screen .back-btn { background-color: #A0522D; border-color: #D2691E; }
+.game-screen .back-btn:hover { background-color: #D2691E; }
+.dev-mode { margin-top: 40px; }
+#dev-mode-btn { background: linear-gradient(45deg, #4A0000, #9B0000); color: #FFD700; border: 2px solid #FFD700; border-radius: 10px; padding: 12px 25px; font-family: var(--font-primary); font-size: 1.3rem; font-weight: bold; cursor: pointer; position: relative; overflow: hidden; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(255, 215, 0, 0.2); }
+#dev-mode-btn::before { content: '⚙️'; margin-right: 10px; display: inline-block; transition: transform 0.5s ease; }
+#dev-mode-btn:hover { background: linear-gradient(45deg, #6A0000, #B80000); color: #fff; transform: scale(1.05); box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3); }
+#dev-mode-btn:hover::before { transform: rotate(180deg); }
+#dev-mode-btn.active { background: linear-gradient(45deg, #004A00, #009B00); box-shadow: 0 0 20px rgba(0, 255, 0, 0.7); }
+#custom-alert-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+#custom-alert-overlay.visible { opacity: 1; pointer-events: auto; }
+#custom-alert-box { background: linear-gradient(145deg, #333, #111); border: 2px solid var(--color-gold); border-radius: 15px; padding: 30px; max-width: 400px; width: 90%; text-align: center; color: #fff; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7); transform: scale(0.9); transition: transform 0.3s ease; }
+#custom-alert-overlay.visible #custom-alert-box { transform: scale(1); }
+#custom-alert-message { font-size: 1.4rem; margin-bottom: 25px; line-height: 1.6; }
+#custom-alert-close { background: var(--color-gold); color: var(--color-dark-red); border: none; border-radius: 8px; padding: 10px 30px; font-family: var(--font-primary); font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.2s ease; }
+#custom-alert-close:hover { background: #fff; transform: scale(1.05); }
 .wheel-container { position: relative; width: 300px; height: 300px; margin: 20px auto; }
 #wheel { width: 100%; height: 100%; border-radius: 50%; border: 5px solid #333; position: relative; }
 .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 30px solid #c0392b; z-index: 2; }
@@ -331,8 +189,6 @@ h1 {
 .cup-prize::after, .cup-empty::after { content: ''; position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%) rotateX(180deg); width: 40px; height: 40px; background-size: contain; background-repeat: no-repeat; background-position: center; }
 .cup-prize::after { content: '🏆'; font-size: 2.5rem; }
 .cup-empty::after { content: '💨'; font-size: 2.5rem; }
-
-/* Jumpscare styles (unchanged) */
 #jumpscare-image.hidden { display: none; }
 #jumpscare-image { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: 9999; pointer-events: none; display: none; }
 #jumpscare-image.jumpscare { display: block !important; animation: jumpscare-animation 0.5s forwards; }
