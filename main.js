@@ -331,6 +331,13 @@ function startCupGame() {
     isSpinning = true;
     playSpinSound();
     updateMoney(-7);
+
+    // Reset cups before starting a new round
+    document.querySelectorAll(".cup").forEach(c => {
+        c.classList.remove("cup-flip", "cup-prize", "cup-empty");
+        c.style.pointerEvents = "auto"; // Re-enable pointer events
+    });
+
     emptyCupIndex = Math.floor(Math.random() * 5);
     cupResult.textContent = "Shuffling...";
     cupContainer.animate([
@@ -378,6 +385,9 @@ function handleCupClick(event) {
                 }
             });
         }, 1000);
-        setTimeout(() => { isSpinning = false; }, 2500);
+        setTimeout(() => { 
+            isSpinning = false; 
+            playCupBtn.disabled = false; // Re-enable the play button
+        }, 2500);
     }, 900);
 }
