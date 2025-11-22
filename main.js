@@ -55,6 +55,7 @@ function easeOutQuint(x) {
 
 // Initialize the application
 function init() {
+  loadPlayerMoney();
   setupEventListeners();
   updateBalance();
 }
@@ -137,9 +138,17 @@ function resetAllGameStates() {
 }
 
 // Money management
+function loadPlayerMoney() {
+  const savedMoney = localStorage.getItem("playerMoney");
+  if (savedMoney) {
+    playerMoney = parseInt(savedMoney, 10);
+  }
+}
+
 function updateMoney(amount) {
   if (!isDevMode) {
     playerMoney += amount;
+    localStorage.setItem("playerMoney", playerMoney);
     updateBalance();
   }
 }
@@ -166,7 +175,7 @@ function initializeLuckySpin() {
   ];
   const sectorAngle = 360 / wheelSectors.length;
   const gradientParts = wheelSectors.map((s, i) => `${s.color} ${i * sectorAngle}deg ${(i + 1) * sectorAngle}deg`);
-  wheel.style.backgroundImage = `conic-gradient(${gradientParts.join(', ')}`;
+  wheel.style.backgroundImage = `conic-gradient(${gradientParts.join(', ')})`;
 }
 
 function playLuckySpin() {

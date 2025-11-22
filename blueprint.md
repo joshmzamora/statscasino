@@ -39,4 +39,5 @@ This project is a web-based casino application featuring three mini-games: "Luck
 ### Balance and Dev Mode
 
 *   **Player Balance:** The user starts with a balance of $100, which is updated as they play the games.
+*   **Balance Persistence:** The player's balance is now saved in the browser's local storage, so it will persist even after the page is refreshed.
 *   **Developer Mode:** A developer mode is available that allows the user to play the games without any cost.
