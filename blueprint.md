@@ -35,6 +35,7 @@ This project is a web-based casino application featuring three mini-games: "Luck
     *   The cups have a box-shadow to make them look more 3D.
     *   The cups lift up slightly when the user hovers over them.
     *   The cups have a "shaking" animation during the shuffling phase.
+    *   **Jumpscare:** If the user selects a cup without a prize, a brief "jumpscare" image will appear on the screen.
 
 ### Balance and Dev Mode
 

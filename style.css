@@ -711,6 +711,41 @@
         border-radius: 12px;
         border: 1px solid rgba(212, 175, 55, 0.3);
       }
+      
+      #jumpscare-image {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        z-index: 9999;
+        pointer-events: none;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .jumpscare {
+        display: block !important;
+        animation: jumpscare-animation 0.5s forwards;
+      }
+
+      @keyframes jumpscare-animation {
+        0% {
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
 
       /* Responsive design */
       @media (max-width: 650px) {

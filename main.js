@@ -20,6 +20,7 @@ const balanceElement = document.getElementById("balance");
 const mainMenu = document.getElementById("main-menu");
 const gameScreens = document.querySelectorAll(".game-screen");
 const devModeCheckbox = document.getElementById("dev-mode");
+const jumpscareImage = document.getElementById("jumpscare-image");
 
 // Game buttons
 const luckySpinBtn = document.getElementById("lucky-spin-btn");
@@ -405,6 +406,10 @@ function handleCupClick(event) {
       cupResult.textContent = "You won $10!";
     } else {
       cupResult.textContent = `You chose empty. You lost $7.`;
+      jumpscareImage.classList.add("jumpscare");
+      setTimeout(() => {
+        jumpscareImage.classList.remove("jumpscare");
+      }, 500);
     }
     cupResult.classList.add(hasPrize ? "win-flash" : "lose-flash");
 
