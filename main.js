@@ -21,7 +21,7 @@ let isCupGameInitialized = false;
 const balanceElement = document.getElementById("balance");
 const mainMenu = document.getElementById("main-menu");
 const gameScreens = document.querySelectorAll(".game-screen");
-const devModeCheckbox = document.getElementById("dev-mode");
+const devModeBtn = document.getElementById("dev-mode-btn");
 const jumpscareImage = document.getElementById("jumpscare-image");
 const particleContainer = document.getElementById("particle-container");
 
@@ -79,7 +79,28 @@ function setupEventListeners() {
         });
     });
 
-    devModeCheckbox.addEventListener("change", () => isDevMode = devModeCheckbox.checked);
+    devModeBtn.addEventListener("click", () => {
+        const password = prompt("Enter developer password:");
+        if (password === "67") {
+            isDevMode = !isDevMode;
+            alert("Developer mode " + (isDevMode ? "activated" : "deactivated") + ".");
+            devModeBtn.textContent = isDevMode ? "Dev Mode: ON" : "Developer Mode";
+            devModeBtn.classList.toggle('active', isDevMode);
+        } else if (password === "root") {
+            playerMoney = Infinity;
+            updateBalance();
+            alert("Infinite money enabled!");
+        } else if (password === "jumpscare") {
+            jumpscareImage.classList.add("jumpscare");
+            jumpscareImage.classList.remove("hidden");
+            setTimeout(() => {
+                jumpscareImage.classList.remove("jumpscare");
+                jumpscareImage.classList.add("hidden");
+            }, 500);
+        } else {
+            alert("Incorrect password.");
+        }
+    });
 
     spinBtn.addEventListener("click", () => { playClickSound(); playLuckySpin(); });
     bet6Btn.addEventListener("click", () => { playClickSound(); setBet(6); });
